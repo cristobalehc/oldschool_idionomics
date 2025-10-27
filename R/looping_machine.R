@@ -44,7 +44,7 @@ looping_machine <- function(dataframe,a_series,b_series,c_series, id_var,
   a_to_b  <- IARIMAXoid_Pro(dataframe,min_n_subject = min_n_subject, minvar = minvar, y_series = b_series,
                             x_series = a_series, id_var = id_var, hlm_compare = hlm_compare, timevar = timevar)
 
-  a_to_b_sub <- a_to_b$results_df[,c(1,28:31)] #extract.
+  a_to_b_sub <- a_to_b$results_df[,c(1,29:32)] #extract.
   a_to_b_sub <- a_to_b_sub %>% #P value.
     dplyr::mutate(p_value = 2 * stats::pt(-abs(xreg / stderr_xreg), n_valid - n_params))
   colnames(a_to_b_sub) <- c(id_var,ab_name,paste0("stderr_",ab_name),paste0(ab_name,"_n_valid"),paste0(ab_name,"_n_params"),paste0(ab_name,'_pval')) #Rename.
@@ -57,7 +57,7 @@ looping_machine <- function(dataframe,a_series,b_series,c_series, id_var,
   b_to_c  <- IARIMAXoid_Pro(dataframe,min_n_subject = min_n_subject, minvar = minvar, y_series = c_series,
                             x_series = b_series, id_var = id_var, hlm_compare = hlm_compare, timevar = timevar)
 
-  b_to_c_sub <- b_to_c$results_df[,c(1,28:31)] #extract.
+  b_to_c_sub <- b_to_c$results_df[,c(1,29:32)] #extract.
   b_to_c_sub <-   b_to_c_sub %>% #P value.
     dplyr::mutate(p_value = 2 * stats::pt(-abs(xreg / stderr_xreg), n_valid - n_params))
   colnames(b_to_c_sub) <- c(id_var,bc_name,paste0("stderr_",bc_name),paste0(bc_name,"_n_valid"),paste0(bc_name,"_n_params"),paste0(bc_name,'_pval')) #Rename.
@@ -69,7 +69,7 @@ looping_machine <- function(dataframe,a_series,b_series,c_series, id_var,
   #c to a condition.
   c_to_a  <- IARIMAXoid_Pro(dataframe,min_n_subject = min_n_subject, minvar = minvar, y_series = a_series,
                             x_series = c_series, id_var = id_var, hlm_compare = hlm_compare, timevar = timevar)
-  c_to_a_sub <- c_to_a$results_df[,c(1,28:31)] #extract.
+  c_to_a_sub <- c_to_a$results_df[,c(1,29:32)] #extract.
   c_to_a_sub <-   c_to_a_sub %>% #P value.
     dplyr::mutate(p_value = 2 * stats::pt(-abs(xreg / stderr_xreg), n_valid - n_params))
   colnames(c_to_a_sub) <- c(id_var,ca_name,paste0("stderr_",ca_name),paste0(ca_name,"_n_valid"),paste0(ca_name,"_n_params"),paste0(ca_name,'_pval')) #Rename.
