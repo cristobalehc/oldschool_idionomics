@@ -259,15 +259,23 @@ IARIMAXoid_Pro <- function(dataframe, min_n_subject = 20, minvar = 0.01, y_serie
       next #Skip the next part of this iteration of the loop, so it doesn't get overriden and throws an error.
     }
 
-    #Tidy the model.
+    # Tidy the model (may be hijacked by fable::tidy.ARIMA)
     tidymodel <- broom::tidy(model)
 
-    # If S3 dispatch was hijacked (e.g., fable's tidy.ARIMA) and we didn't get
-    # a data frame / tibble (or we got NULL), fall back to broom's Arima method
+    # If we didn't get a tibble/data.frame (e.g., fable's tidy.ARIMA returned NULL),
+    # fall back by stripping the "ARIMA" class so broom's tidy.Arima is used.
     if (is.null(tidymodel) || !is.data.frame(tidymodel)) {
+
       if (inherits(model, "Arima")) {
-        # Force the correct method for forecast::Arima objects
-        tidymodel <- broom:::tidy.Arima(model)
+
+        # Work on a copy so we don't touch `model` used later
+        model2 <- model
+        class(model2) <- setdiff(class(model2), "ARIMA")
+
+        # Now S3 dispatch sees classes c("forecast_ARIMA", "Arima"),
+        # so it will choose broom's tidy.Arima method instead of fable's tidy.ARIMA
+        tidymodel <- broom::tidy(model2)
+
       } else {
         stop(
           "IARIMAXoid_Pro: could not tidy model of class ",
@@ -276,9 +284,12 @@ IARIMAXoid_Pro <- function(dataframe, min_n_subject = 20, minvar = 0.01, y_serie
       }
     }
     
-    
-    #Cast the tidy dataframe.
-    tidymodel <-  tidyr::pivot_wider(tidymodel, names_from ='term', values_from=c('estimate','std.error'))
+    # Cast the tidy tibble/data.frame
+    tidymodel <- tidyr::pivot_wider(
+      tidymodel,
+      names_from  = "term",
+      values_from = c("estimate", "std.error")
+    )
 
     #Fill the number of ARIMA parameteres lists: Just the number of AR I MA processes involved.
     AR_N[[i]] <- model$arma[1] #Fill AR list.
