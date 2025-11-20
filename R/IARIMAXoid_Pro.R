@@ -261,6 +261,22 @@ IARIMAXoid_Pro <- function(dataframe, min_n_subject = 20, minvar = 0.01, y_serie
 
     #Tidy the model.
     tidymodel <- broom::tidy(model)
+
+    # If S3 dispatch was hijacked (e.g., fable's tidy.ARIMA) and we didn't get
+    # a data frame / tibble (or we got NULL), fall back to broom's Arima method
+    if (is.null(tidymodel) || !is.data.frame(tidymodel)) {
+      if (inherits(model, "Arima")) {
+        # Force the correct method for forecast::Arima objects
+        tidymodel <- broom:::tidy.Arima(model)
+      } else {
+        stop(
+          "IARIMAXoid_Pro: could not tidy model of class ",
+          paste(class(model), collapse = ", ")
+        )
+      }
+    }
+    
+    
     #Cast the tidy dataframe.
     tidymodel <-  tidyr::pivot_wider(tidymodel, names_from ='term', values_from=c('estimate','std.error'))
 
