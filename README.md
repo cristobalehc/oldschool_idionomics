@@ -1,6 +1,6 @@
-## *Idionomics*
+## *oldschool_idionomics*
 
-#### Making idionomic analyses accessible and easy to use. 
+#### First package version, deprecated. 
 
 This is the first version of the "idionomics" package. Currently, it has the following wrapper functions with robot names -development version only-: 
 
