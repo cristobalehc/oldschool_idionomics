@@ -1,7 +1,9 @@
 ## *oldschool_idionomics*
 
-#### First package version, deprecated. 
+### First package version (Deprecated)
 
-This is the first version of the "idionomics" package, and it is currently deprecated. Please refer to "idionomics".
+The ancestor of the idionomics package. The original iteration was characterized by whimsical robot names, raw experimentation, lots of anxiety, and a lack of cohesive architecture. Its invasively verbose codebase was pure, beautiful functional chaos that served its purpose well. However, as we needed to scale the tools, we rewrote it from the ground up.
+
+Please refer to the currently maintained [idionomics](https://github.com/cristobalehc) repository.
 
 
